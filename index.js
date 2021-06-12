@@ -43,6 +43,10 @@ const salesSchema = new Schema({
 
 const Sale = mongoose.model("Sale", salesSchema);
 
+app.get("/", (req, res) => {
+  res.send("App is up and running!");
+});
+
 app.post("/sale", async (req, res) => {
   try {
     const sale = new Sale(req.body);
