@@ -60,7 +60,7 @@ app.post("/sale", async (req, res) => {
     const sale = new Sale(req.body);
     await sale.save();
 
-    res.send(sale);
+    res.json(sale);
   } catch (error) {
     console.log(error);
   }
