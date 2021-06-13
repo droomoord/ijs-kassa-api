@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-var cors = require("cors");
+// var cors = require("cors");
 const mongoose = require("mongoose");
 
 mongoose.connect(
@@ -9,8 +9,14 @@ mongoose.connect(
 );
 
 const app = express();
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 const port = 3000;
 
 const { Schema } = mongoose;
@@ -46,7 +52,7 @@ const salesSchema = new Schema({
 const Sale = mongoose.model("Sale", salesSchema);
 
 app.get("/", (req, res) => {
-  res.send("App is up and running!");
+  res.send("App is up and running! v2");
 });
 
 app.post("/sale", async (req, res) => {
