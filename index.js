@@ -47,15 +47,14 @@ const salesSchema = new Schema({
   },
   total: {
     type: Number,
-    required: true,
   },
 });
 
 const Sale = mongoose.model("Sale", salesSchema);
 
-app.get("/", (req, res) => {
-  res.send("App is up and running! v3");
-});
+// app.get("/", (req, res) => {
+//   res.send("App is up and running! v3");
+// });
 
 app.post("/sale", async (req, res) => {
   try {
