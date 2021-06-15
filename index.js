@@ -72,10 +72,60 @@ app.post("/sale", async (req, res) => {
   }
 });
 
-app.get("/sale", async (req, res) => {
+app.get("/sales", async (req, res) => {
   try {
-    const sales = await Sale.find();
-    res.send(sales);
+    if (!req.query.date) {
+      res.send("provide a date");
+    }
+    const { date } = req.query;
+    const re = /(\d*)-(\d*)-(\d*)/;
+    const search = re.exec(date);
+    const year = parseInt(search[1]);
+    const month = parseInt(search[2]) - 1;
+    const day = parseInt(search[3]);
+
+    console.log(year, month, day);
+
+    const sales = await Sale.find({
+      date: {
+        $lt: new Date(year, month, day + 1),
+        $gte: new Date(year, month, day),
+      },
+    });
+
+    if (sales.length === 0) {
+      res.send({
+        msg: "no transactions for this date",
+      });
+    } else {
+      let total = 0;
+      let cash = 0;
+      let pin = 0;
+      let products = {
+        bol1: 0,
+        bol2: 0,
+        bol3: 0,
+      };
+      sales.forEach((sale) => {
+        total += sale.total;
+        if (!sale.pin) cash += sale.total;
+        if (sale.pin) pin += sale.total;
+        if (sale.products.bol1) products.bol1 += sale.products.bol1;
+        if (sale.products.bol2) products.bol2 += sale.products.bol2;
+        if (sale.products.bol3) products.bol3 += sale.products.bol3;
+      });
+
+      const response = {
+        transactions: sales.length,
+        total,
+        cash,
+        pin,
+        products,
+        sales,
+      };
+
+      res.send(response);
+    }
   } catch (error) {
     console.log(error);
   }
