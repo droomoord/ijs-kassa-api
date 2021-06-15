@@ -8,6 +8,11 @@ mongoose.connect(
   { useNewUrlParser: true }
 );
 
+// mongoose.connect(
+//   `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@cluster0.4jrce.mongodb.net/test?retryWrites=true&w=majority`,
+//   { useNewUrlParser: true }
+// );
+
 const app = express();
 app.use(cors());
 app.use(express.json());
